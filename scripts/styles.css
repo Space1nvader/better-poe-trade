@@ -25,14 +25,32 @@
 
 #trade .search-bar.search-advanced.search-advanced-hidden{
     padding-bottom: 0 !important;
-    padding-top: 60px !important;
+}
+.boxShadow{
+    top: -80px;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    height: 80px;
+    position: fixed;
+    box-shadow: black 0px 20px 20px 20px;
 }
 
+#trade .btn.search-btn.advancedSubmitBtn{
+    margin: 22px auto 0;
+    min-width: 90% !important;
+    background-color: #0f304d;
+    border-color: #4c4c7d;
+    padding: 11px 8px;
+    height: auto;
+    font-size: 16px;
+}
 
 .saveBtn{
     order: 4;
     padding-left: 40px;
 }
+
 
 .favoritesBtn{
     order: 5
@@ -190,6 +208,32 @@
     width: 100%;
     margin-top: 8px;
     display: none;
+}
+
+
+/**
+* FILTER PADDED OPTION LIST
+*/
+.filterPaddedOptionList{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 90%;
+    margin: 0 auto;
+}
+.optionButton{
+    color: #e2e2e2;
+    background-color: #1e2124;
+    position: relative;
+    padding: 6px;
+    line-height: 16px;
+    min-height: 34px;
+    transition: all .2s ease;
+    border: 1px solid #aeaeae;
+}
+.optionButton:hover{
+    color: #1e2124;
+    background-color: #aeaeae;
 }
 
 /**

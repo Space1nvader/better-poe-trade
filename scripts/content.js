@@ -30,22 +30,50 @@ const svgdeleteicon = `<svg xmlns="http://www.w3.org/2000/svg" width="24px" heig
 <path d="M14.5747 10.2538C14.9869 10.295 15.2876 10.6625 15.2464 11.0747L14.7464 16.0747C14.7052 16.4868 14.3376 16.7875 13.9255 16.7463C13.5133 16.7051 13.2126 16.3376 13.2538 15.9254L13.7538 10.9254C13.795 10.5133 14.1626 10.2125 14.5747 10.2538Z"fill="#fff"/>
 </svg>` 
 
-const getFavorites = () => {
-    const favorites = window.localStorage.getItem('favorites')
-    return JSON.parse(favorites || '[]') 
+const FAVORITES_STORAGE_KEY_BASE = 'favorites'
+
+const getTradeStorageModifier = () => {
+    // Пример: /trade2/search/... -> "2", /trade/search/... -> ""
+    const path = window.location?.pathname || '';
+    const match = path.match(/\/trade(\d*)\//i);
+    return match?.[1] || '';
+};
+
+const FAVORITES_STORAGE_KEY = (() => {
+    const modifier = getTradeStorageModifier();
+    return modifier ? `${FAVORITES_STORAGE_KEY_BASE}_${modifier}` : FAVORITES_STORAGE_KEY_BASE;
+})();
+
+const getFavorites = async () => {
+     // ПРОВЕРКА НА EXTENSION STORAGE SUPPORT
+     if(chrome?.storage?.local){
+        const favoritesExtensionStorage = await chrome.storage.local.get(FAVORITES_STORAGE_KEY)
+        if(favoritesExtensionStorage[FAVORITES_STORAGE_KEY]?.length){
+            return favoritesExtensionStorage[FAVORITES_STORAGE_KEY] 
+        }
+    }
+    const favoritesLocalStorage = window.localStorage.getItem(FAVORITES_STORAGE_KEY) || '[]'
+
+    if(favoritesLocalStorage){
+       return await JSON.parse(favoritesLocalStorage) 
+    }
+
+    return []
 }
 
-const addFavorite = (value) => {
-    const favorites = getFavorites()
+const addFavorite = async (value) => {
+    const favorites = await getFavorites()
     favorites.push(value)
 
-    console.log('favorites', favorites)
-    window.localStorage.setItem('favorites', JSON.stringify(favorites));
+    window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+    if(chrome?.storage?.local){
+        chrome.storage.local.set({[FAVORITES_STORAGE_KEY]: favorites})
+    }
 }
 
 // ПРоверка на существование поиска в избранном
-const saveFavoriteSearch = (name) => {
-        const favorites = getFavorites()
+const saveFavoriteSearch = async (name) => {
+        const favorites = await getFavorites()
 
         const targetName = name.trim();
         const isExist = favorites.length && favorites.some((item) => item.name.toLowerCase() === targetName.toLowerCase());
@@ -61,12 +89,13 @@ const saveFavoriteSearch = (name) => {
 const createFavoriteItem = (item) => {
     const deleteFavoriteItem = document.createElement('button');
 
-    const deleteFavoriteHandler= (parent) => {
-        const favorites = getFavorites()
+    const deleteFavoriteHandler= async (parent) => {
+        const favorites = await getFavorites()
       
         const newFavorites = favorites.filter(favorite => favorite.name !== item.name)
 
-        window.localStorage.setItem('favorites', JSON.stringify(newFavorites));
+        window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(newFavorites));
+        window?.extensionStorage?.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(newFavorites));
         parent.remove();
     }
 
@@ -147,8 +176,9 @@ const addControls = (panel,) => {
 
    
 
-    const openFavoriteModal = () => {
-        const favorites = getFavorites()
+    const openFavoriteModal = async () => {
+        const favorites = await getFavorites()
+        console.log('favorites', favorites)
         favoritesListModal.style.display = 'flex';
         favoritesListItems.innerHTML = ''; 
         if(favorites?.length){
@@ -271,7 +301,7 @@ const addControls = (panel,) => {
     const controls = panel.querySelector('.controls');
     const center = controls.querySelector('.controls-center');
     const input = center.querySelector('input.multiselect__input');
-    const submitButton = center.querySelector('button.search-btn');
+    const submitButton = controls.querySelector('.search-btn');
     document.addEventListener('keyup', (event) => {
         // 13 = enter
         if(event.key === 13){
@@ -296,24 +326,70 @@ const addControls = (panel,) => {
     const favoritesButton = document.createElement('button');
 
     favoritesButton.className = 'favoritesBtn';
-    favoritesButton.innerHTML = 'Favorites';
+    favoritesButton.innerHTML = 'SAVED';
     favoritesButton.addEventListener('click', () => {
         openFavoriteModal();
     });
 
 
+    const boxShadowElement = document.createElement('div');
+    boxShadowElement.className = 'boxShadow';
     controls.appendChild(favoritesButton);
+    document.body.appendChild(boxShadowElement);
 
-}
+
+    const advancedPanelRight = document.querySelector('.search-panel .search-advanced-pane.brown');
+
+    const advancedSubmitButton = document.createElement('button');
+    advancedSubmitButton.className = 'advancedSubmitBtn btn search-btn';
+    advancedSubmitButton.innerHTML = 'Поиск'
+
+    advancedSubmitButton.addEventListener('click', () => {
+        submitButton.click();
+    });
+
+
+
+
+    const filterPaddedContainer = document.createElement('div');
+    filterPaddedContainer.className = 'filterPaddedOptionList';
+    const subOptionsSelect = advancedPanelRight.querySelector('.filter-body .multiselect.filter-select.filter-group-select');
+
+    subOptionsSelect.parentElement.style.display = 'none';
+    const subOptionsSelectContent = subOptionsSelect.querySelector('.multiselect__content-wrapper .multiselect__content');
+
+
+    const subOptionsLiTexts = Array
+        .from(subOptionsSelectContent.querySelectorAll('li.multiselect__element'))
+        .map((li) => {
+            const span = li.querySelector('span');
+            if (span?.classList?.contains('multiselect__option--disabled')) return null;
+            li.setAttribute('data-value', span?.textContent.trim())
+            return span?.textContent.trim();
+        })
+        
+    subOptionsLiTexts.forEach((option) => {
+        if(!option) return;
+        const optionButton = document.createElement('button');
+        optionButton.className = 'optionButton';
+        optionButton.innerHTML = option;
+        optionButton.addEventListener('click', () => {
+            const targetElement = subOptionsSelectContent.querySelector(`li[data-value="${option}"] span`);
+            
+            if(targetElement){
+                targetElement.click();
+            }
+        });
+
+        filterPaddedContainer.appendChild(optionButton);
+
+    })
+
+    advancedPanelRight.appendChild(filterPaddedContainer);
+
+    advancedPanelRight.appendChild(advancedSubmitButton);
  
-
-
-    const inputPanelInit = (panel)=> {
-        addControls(panel);
-
-    }
-
-
+}
     
 
 
@@ -333,5 +409,5 @@ const addControls = (panel,) => {
 
     (async () => {
         const panelElement = await waitForElement('.search-panel', { intervalMs: 300, timeoutMs: 10_000 });
-        if (panelElement) inputPanelInit(panelElement);
-    })();
+        if (panelElement) addControls(panelElement);
+    })();   
