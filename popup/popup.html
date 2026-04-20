@@ -6,8 +6,17 @@
     <body>
         <div id="popup">
             <h3>Better Poe Trade and Favorites</h3>
-            <a href="https://www.pathofexile.com/trade/search" target="_blank">POE TRADE</a>
-            <a href="https://www.pathofexile.com/trade2/search" target="_blank">POE II TRADE</a>
+            <div class="popup-poe-links">
+                <a href="https://www.pathofexile.com/trade/search" data-value="0" target="_blank">POE TRADE</a>
+                <a href="https://www.pathofexile.com/trade2/search" data-value="1" target="_blank">POE II TRADE</a>
+                
+            </div>
+           <div class="popup-poe-switch" >
+                <button class="poe-switch-button" data-active="favorites">POE</button>
+                <button class="poe-switch-button" data-active="favorites_2">POE II</button>
+            </div>
+
+
             <div class="favorites-list">
                 <span>Saved Filters</span>
             </div>

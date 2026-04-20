@@ -95,7 +95,12 @@ const createFavoriteItem = (item) => {
         const newFavorites = favorites.filter(favorite => favorite.name !== item.name)
 
         window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(newFavorites));
-        window?.extensionStorage?.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(newFavorites));
+        if(chrome?.storage?.local){
+            const favoritesExtensionStorage = await chrome.storage.local.get(FAVORITES_STORAGE_KEY)
+            if(favoritesExtensionStorage[FAVORITES_STORAGE_KEY]?.length){
+                chrome.storage.local.set({[FAVORITES_STORAGE_KEY]: newFavorites})
+            }
+        }
         parent.remove();
     }
 
@@ -178,7 +183,7 @@ const addControls = (panel,) => {
 
     const openFavoriteModal = async () => {
         const favorites = await getFavorites()
-        console.log('favorites', favorites)
+
         favoritesListModal.style.display = 'flex';
         favoritesListItems.innerHTML = ''; 
         if(favorites?.length){
@@ -288,7 +293,6 @@ const addControls = (panel,) => {
     document.body.appendChild(savePopup);
 
     window.addEventListener('keydown', (event) => {
-        console.log('event.key', event.key)
         if(event.key === 'Escape'){
             removePopup();
             removeModal()

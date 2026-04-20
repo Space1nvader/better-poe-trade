@@ -21,24 +21,97 @@ body {
 #popup a:hover {
     opacity: .8;
 }
+
 #popup h3{
     color: #fff;
     font-size: 16px;
+    text-shadow:0px 0px 0 rgb(210,210,210),1px 1px 0 rgb(175,175,175),2px 2px 0 rgb(141,141,141),3px 3px 0 rgb(106,106,106),4px 4px 0 rgb(71,71,71),5px 5px 0 rgb(36,36,36), 6px 6px 0 rgb(1,1,1),7px 7px 6px rgba(0,0,0,0.25),7px 7px 1px rgba(0,0,0,0.5),0px 0px 6px rgba(0,0,0,.2);
 }
+
+#popup .popup-poe-links{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+#popup .popup-poe-links a {
+    padding: 2px 8px;
+    display: block;
+}
+
+#popup .favorite-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e9cf9f;
+    margin-bottom: 14px; 
+}
+
+#popup .delete-button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #e2e2e2;
+    font-size: 12px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all .2s ease;
+}
+
+#popup .delete-button:hover{
+    background-color: #e2e2e2;
+    color: #000;
+}
+
 #popup .favorite-item a{
+    display: block;
+    width: 100%;
     padding-left: 4px;
-    font-size: 22px;
-    margin-bottom: 8px !important; 
+    font-size: 18px;
+    text-decoration: none;
+    margin-bottom: 0;
 }
 
 #popup .favorites-list span{
     color: #c2ffc4;
-    margin:30px 0 8px;
     font-size: 14px;
     display: block;
+    margin-bottom: 12px;
 }
+
 #popup .github-link{
     margin-top: 40px;
     font-size: 12px;
+    text-align: right;
     color: #aeaeae;
+}
+
+#popup .popup-poe-switch{
+    display: flex;
+    gap: 2px;
+    border-radius: 4px;
+    height: 30px;
+    background-color: #aeaeae;
+    margin-bottom: 16px;
+}
+
+#popup .poe-switch-button{
+    background-color: #5c5c5c;
+    width: 50%;
+    cursor: pointer;
+    border: 1px solid #aeaeae;
+    height: 100%;
+    color: #e2e2e2;
+    padding: 4px 8px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all .2s ease;
+}
+#popup .poe-switch-button:hover{
+    opacity: .8;
+}
+
+#popup .poe-switch-button.active{
+    background-color: #94ec8c;
+    color: #000;
 }
