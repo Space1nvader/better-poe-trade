@@ -1,0 +1,30 @@
+{
+  "name": "BPT-Favorites",
+  "description": "Extension for favorites and search",
+  "version": "1.1",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "js": [
+        "scripts/content.js"
+      ],
+      "css": [
+        "scripts/styles.css"
+      ],
+      "matches": [
+        "*://*.pathofexile.com/*"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "48": "icons/bpt-icon-48.png",
+      "128": "icons/bpt-icon-128.png"
+    }
+  },
+  "icons": {
+    "48": "icons/bpt-icon-48.png",
+    "128": "icons/bpt-icon-128.png"
+  }
+}

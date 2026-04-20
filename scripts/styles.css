@@ -1,0 +1,218 @@
+
+#trade .controls.controls:not(.row){
+    position: fixed;
+    top: 12px;
+    right: 0;
+    display: flex;
+    width: 64%;
+    gap: 8px;
+    z-index: 4;
+    margin: 0;
+    padding: 0 !important;
+
+}
+#trade .search-bar.search-advanced.search-advanced{
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    overflow: auto;
+    padding-top: 50px;
+}
+
+#trade .search-bar.search-advanced.search-advanced-hidden{
+    padding-bottom: 0 !important;
+    padding-top: 60px !important;
+}
+
+
+.saveBtn{
+    order: 4;
+    padding-left: 40px;
+}
+
+.favoritesBtn{
+    order: 5
+}
+
+#trade .btn.livesearch-btn{
+    width: auto;
+    max-width: 100%;
+    min-width: 0 !important;
+    overflow: hidden;
+    height: 38px;
+}
+#trade .controls-left.controls-left{
+    order: 3;
+    width: auto !important;
+}
+#trade .controls-right.controls-right{
+    margin-left: 66px;
+    display: flex;
+    width: auto !important;
+}
+#trade .controls-center{
+    width: auto !important;
+}
+#trade .btn.search-btn{
+    width:  auto !important;
+    min-width: 200px !important;
+    height: 38px;
+}
+
+
+#trade .btn.clear-btn{
+    margin-right: 8px;
+    border-color: #aeaeae
+}
+
+#trade .search-bar div.search-left{
+    position: fixed !important;
+    top: 12px;
+    left: 8px;
+    z-index: 4;
+    width: 35%;
+}
+#trade .multiselect.search-select {
+    height: 38px;
+    width: calc(1200px / 100% * 35);
+}
+
+
+/**
+* FAVORITES LIST MODAL
+*/
+.favoritesListModalWrap{
+    background-color:#000;
+    min-width: 500px;
+    max-width: 100%;
+    min-height: 300px;
+    border: 1px solid #fff;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 16px;
+}
+.favoritesListTitle{
+    margin-bottom: 18px;
+}
+.favoriteItem{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #aeaeae;
+    margin-bottom: 8px;
+}
+
+.favoritesInfoText{
+    opacity: .6;
+    font-size: 11px;
+    color: #aeaeae;
+    margin-top: 8px;
+    text-align: center;
+    width: 100%;
+    padding: 20px 40px;
+}
+
+.favoriteItemIcon{
+    width: 24px;
+    margin-right: 8px;
+}
+
+.favoriteItemLink{
+    width: 100%;
+    text-decoration: underline;
+}
+
+.favoriteItemActions{
+    display: flex;
+    gap: 4px;
+}
+
+
+.favoriteItemAction{
+    background-color: transparent;
+    border: none;
+}
+
+
+/**
+* SAVE POPUP
+*/
+.favoritesListModal,
+.savePopupOverlay{
+    display: none;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+}
+
+
+.savePopupContent{
+    height: fit-content;
+    min-width: 500px;
+    max-width: 100%;
+    border: 1px solid #fff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background-color:#000;
+}
+
+.savePopupField{
+    margin-top: 8px;
+    display: flex;
+}
+
+.savePopupField input{
+    width: 100%;
+    padding: 4px;
+    color: #000;
+    margin: 0 8px;
+    border-radius: 4px;
+}
+.savePopupField button{
+    padding: 4px;
+    color: #000;
+    border-radius: 4px;
+}
+.savePopupAlert {
+    width: 100%;
+    margin-top: 8px;
+    display: none;
+}
+
+/**
+* AD OFF
+*/
+.trade .logo a {
+    max-height: 130px;
+}
+.trade .wrapper{
+    margin-top: 68px !important;
+}
+.news-banner{
+    display: none !important;
+}
+
+
+@media (min-width: 1550px) {
+    #trade .search-bar div.search-left {
+        width: 540px !important;
+        left: calc(-768px + 50vw)
+    }
+    #trade .controls.controls:not(.row){
+        width: 950px;
+        right: calc(50vw - 1520px / 2);
+    }
+}
